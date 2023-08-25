@@ -3,6 +3,7 @@ from os.path import exists
 from os import makedirs
 import json
 import asyncio
+import re
 from playwright.async_api import Playwright, async_playwright, expect, TimeoutError
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -43,10 +44,14 @@ HEADLESS = False
 CONCURRENCY = 3
 semaphore = asyncio.Semaphore(CONCURRENCY)
 
+async def cancel_request(route, request):
+    await route.abort()
+
 async def scrape_page(page, url, selector):
     async with semaphore:
         logging.info('scraping %s', url)
         try:
+            await page.route(re.compile(r"(\.png)|(\.jpg)"), cancel_request)
             await page.goto(url,  timeout=TIMEOUT * 1000)
             # await page.wait_for_load_state(state='networkidle')
             await page.wait_for_selector(selector)
