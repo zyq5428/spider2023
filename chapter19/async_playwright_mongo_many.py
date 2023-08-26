@@ -4,6 +4,7 @@ from os import makedirs
 import json
 import asyncio
 import re
+import time
 from playwright.async_api import Playwright, async_playwright, expect, TimeoutError
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -70,20 +71,24 @@ async def scrape_detail(page, url):
     await scrape_page(page, url, 'h2')
 
 async def parse_detail(page):
-    url = page.url
-    name = await page.eval_on_selector('h2', 'node => node.innerText')
-    categories = await page.eval_on_selector_all('.categories button span', 'nodes => nodes.map(node => node.innerText)')
-    cover = await page.eval_on_selector('.cover', 'node => node.src')
-    score = await page.eval_on_selector('.score', 'node => node.innerText')
-    drama = await page.eval_on_selector('.drama p', 'node => node.innerText')
-    return {
-        'url': url,
-        'name': name,
-        'categories': categories,
-        'cover': cover,
-        'score': score,
-        'drama': drama
-    }
+    try:
+        url = page.url
+        name = await page.eval_on_selector('h2', 'node => node.innerText')
+        categories = await page.eval_on_selector_all('.categories button span', 'nodes => nodes.map(node => node.innerText)')
+        cover = await page.eval_on_selector('.cover', 'node => node.src')
+        score = await page.eval_on_selector('.score', 'node => node.innerText')
+        drama = await page.eval_on_selector('.drama p', 'node => node.innerText')
+        return {
+            'url': url,
+            'name': name,
+            'categories': categories,
+            'cover': cover,
+            'score': score,
+            'drama': drama
+        }
+    except AttributeError:
+        logging.error('parse error,url: %s', url, exc_info=True)
+        return None
 
 # async def save_data(data):
 #     name = data.get('name')
@@ -122,5 +127,8 @@ async def main():
     await asyncio.gather(*tasks)
 
 if __name__ == '__main__':
+    start = time.time()
     asyncio.run(main())
+    end = time.time()
+    logging.info('Cost time: %s', end - start)
 
