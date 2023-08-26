@@ -25,7 +25,7 @@ exists(RESULTS_DIR) or makedirs(RESULTS_DIR)
 设置MONGO异步访问
 '''
 MONGO_CONNECTION_STRING = 'mongodb://localhost:27017'
-MONGO_NAME = 'movie824'
+MONGO_NAME = 'movie826'
 MONGO_DB_NAME = MONGO_NAME
 MONGO_COLLECTION_NAME = MONGO_NAME
 
@@ -42,7 +42,7 @@ HEADLESS = False
 '''
 定义信号量来控制并发量
 '''
-CONCURRENCY = 3
+CONCURRENCY = 10
 semaphore = asyncio.Semaphore(CONCURRENCY)
 
 async def cancel_request(route, request):
@@ -73,11 +73,11 @@ async def scrape_detail(page, url):
 async def parse_detail(page):
     try:
         url = page.url
-        name = await page.eval_on_selector('h2', 'node => node.innerText')
-        categories = await page.eval_on_selector_all('.categories button span', 'nodes => nodes.map(node => node.innerText)')
-        cover = await page.eval_on_selector('.cover', 'node => node.src')
-        score = await page.eval_on_selector('.score', 'node => node.innerText')
-        drama = await page.eval_on_selector('.drama p', 'node => node.innerText')
+        name = await page.locator('h2.m-b-sm').inner_text()
+        categories = await page.locator('.categories button span').all_inner_texts()
+        cover = await page.locator('.cover').get_attribute('src')
+        score = await page.locator('.score').inner_text()
+        drama = await page.locator('.drama p').inner_text()
         return {
             'url': url,
             'name': name,
