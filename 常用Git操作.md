@@ -6,20 +6,44 @@
 
 ![Git Bash](./assets/打开Git Bash.png)
 
-> 添加本地文件修改，可使用以下两个命令。
+> 每次修改前，建议从远程服务器拉取最新内容，可采用以下命令。
 
-``` {.line-numbers highlight=[1]}
-hero@hero:~/git/hero$ git fetch origin
-Username for 'https://github.com': zyq5428	
-Password for 'https://zyq5428@github.com': 
-remote: Enumerating objects: 4, done.
-remote: Counting objects: 100% (4/4), done.
-remote: Compressing objects: 100% (2/2), done.
-remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
-Unpacking objects: 100% (3/3), done.
-From https://github.com/zyq5428/hero
-   1432267..7d696db  master     -> origin/master
-hero@hero:~/git/hero$
+``` {.line-numbers highlight=[2]}
+59427@HeroZhou MINGW64 /f/python/spider2023 (main)
+$ git pull
+Already up to date.
+
+59427@HeroZhou MINGW64 /f/python/spider2023 (main)
+$
+```
+
+> 添加本地文件修改，并推送到远程服务器，可使用以下三个命令。
+
+``` {.line-numbers highlight=[2, 5, 12]}
+59427@HeroZhou MINGW64 /f/python/spider2023 (main)
+$ git add -A
+
+59427@HeroZhou MINGW64 /f/python/spider2023 (main)
+$ git commit -m '添加常用的Git操作'
+[main 879702a] 添加常用的Git操作
+ 2 files changed, 469 insertions(+)
+ create mode 100644 "assets/\346\211\223\345\274\200Git Bash.png"
+ create mode 100644 "\345\270\270\347\224\250Git\346\223\215\344\275\234.md"
+
+59427@HeroZhou MINGW64 /f/python/spider2023 (main)
+$ git push
+Enumerating objects: 6, done.
+Counting objects: 100% (6/6), done.
+Delta compression using up to 12 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (5/5), 45.95 KiB | 201.00 KiB/s, done.
+Total 5 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To github.com:zyq5428/spider2023.git
+   92884bc..879702a  main -> main
+
+59427@HeroZhou MINGW64 /f/python/spider2023 (main)
+$
 ```
 
 ### 添加本地仓库更改
