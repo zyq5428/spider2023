@@ -98,7 +98,7 @@ async def parse_detail(page):
 async def save_data(data):
     logging.debug('saving data %s', data)
     return await collection.update_one({
-        'id': data.get('name')
+        'name': data.get('name')
     }, {
         '$set': data
     }, upsert=True)
